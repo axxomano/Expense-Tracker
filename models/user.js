@@ -26,7 +26,8 @@ const User = sequelize.define('User', {
     await sequelize.authenticate();
     console.log('Connection to the database successful.');
 
-    await User.sync({ force: true }); // force will delete previous data
+    //await User.sync({ force: true }); // force will delete previous data
+    await User.sync(); // without force 
 
     console.log('User model synced with the database.');
   } catch (error) {

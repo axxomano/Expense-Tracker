@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Signup Form</title>
+  <title>Login Page</title>
 </head>
 <body>
 
-<h2>Signup Form</h2>
+<h2>Login</h2>
 
 <form action="http://localhost:3000/users/signup/" method="post">
   <div>
@@ -13,25 +13,21 @@
     <input type="email" id="email" name="email" required><br><br>
   </div>
   <div>
-    <label for="name">Enter your Name:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
-  </div>
-  <div>
     <label for="password">Enter your Password:</label><br>
     <input type="password" id="password" name="password" required><br><br>
   </div>
-  <button type="button" onclick="submitForm()">Submit</button>
+  <button type="button" onclick="submitForm()">Login</button>
+  <p id="message"></p>
 </form>
 
 <script>
     function submitForm() {
       const formData = {
         email: document.getElementById('email').value,
-        name: document.getElementById('name').value,
         password: document.getElementById('password').value,
       };
     
-      fetch('http://localhost:3000/users/signup', {
+      fetch('http://localhost:3000/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,6 +37,7 @@
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
+        document.getElementById('message').innerText = data.message
       })
       .catch(error => {
         console.error('Error:', error);
