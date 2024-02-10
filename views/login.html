@@ -36,6 +36,7 @@
       })
       .then(response => { generatedData = response.status + " "; return response.json();})
       .then(data => {
+        data.message 
         generatedData += data.message
         document.getElementById('message').innerText = generatedData
       })

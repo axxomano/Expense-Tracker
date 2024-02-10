@@ -52,9 +52,12 @@ app.post('/users/login', async (req, res) => {
     }
 
     bcrypt.compare(password,existingUser.password, 
-      (err,resp)=>{
-        if(err) return res.status(400).json({ message: err}
-        return res.status(200).json({message: resp})
+      (err,result)=>{
+        if(err) throw new Error('Something went wrong!')
+        if(result==true)
+        return res.status(200).json({message: 'Logged in Succesfully'})
+        else
+        return res.status(400).json({message: 'Wrong Password'})
       })
   } catch (error) {
     console.error('Error logging in:', error);
