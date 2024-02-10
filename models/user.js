@@ -1,4 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const bcrypt = require('bcrypt')
 
 const sequelize = new Sequelize('expense-tracker','root','admin',{
     dialect : 'mysql',

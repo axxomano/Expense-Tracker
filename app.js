@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cors = require('cors'); 
 const User = require('./models/user');
@@ -23,8 +24,12 @@ app.post('/users/signup', async (req, res) => {
       return res.status(409).json({ message: 'User already exists' });
     }
 
-    const newUser = await User.create({ name, email, password });
-    return res.status(201).json({ message: 'User created successfully', user: newUser });
+    bcrypt.hash(password,10,async(err,hash)=>{
+        if(err) console.log(err)
+        const newUser = await User.create({ name, email, password : hash });
+        return res.status(201).json({ message: 'User created successfully', user: newUser });
+    })
+
   } catch (error) {
     console.error('Error creating user:', error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -46,12 +51,11 @@ app.post('/users/login', async (req, res) => {
       return res.status(409).json({ message: 'Email doesnot exist' });
     }
 
-    if (password !== existingUser.password) {
-        return res.status(401).json({ message: 'Invalid password' });
-    }
-
-    res.json({ message: 'Login successful' });
-
+    bcrypt.compare(password,existingUser.password, 
+      (err,resp)=>{
+        if(err) return res.status(400).json({ message: err}
+        return res.status(200).json({message: resp})
+      })
   } catch (error) {
     console.error('Error logging in:', error);
     return res.status(500).json({ message: 'Internal server error' });
