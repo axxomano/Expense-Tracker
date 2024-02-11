@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expense Page</title>
+</head>
+<body>
+
+<h2>Add Expense</h2>
+
+<form action="http://localhost:3000/expense/add" method="post">
+  <div>
+    <label for="expense">Enter your Expense:</label><br>
+    <input type="number" id="expense" name="expense" required><br><br>
+  </div>
+  <div>
+    <label for="description">Enter your description:</label><br>
+    <input type="text" id="description" name="description" required><br><br>
+  </div>
+  <div>
+    <label for="expensetype">Expense Type:</label><br>
+    <select id="expensetype" name="expensetype" required>
+      <option>Food</option>
+      <option>Petrol</option>
+      <option>Salary</option>
+    </select>
+    <br><br>
+  </div>
+  <button type="button" onclick="submitForm()">Add Expense</button>
+  <p id="message"></p>
+</form>
+
+<script>
+    function submitForm() {
+      const formData = {
+        expense: document.getElementById('expense').value,
+        description: document.getElementById('description').value,
+        expensetype: document.getElementById('expensetype').value,
+      };
+    let generatedData;
+      fetch('http://localhost:3000/expense/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      .then(response => { generatedData = response.status + " "; return response.json();})
+      .then(data => {
+        data.message 
+        generatedData += data.message
+        document.getElementById('message').innerText = generatedData
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+    </script>
+    
+</body>
+</html>

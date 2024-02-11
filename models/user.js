@@ -1,5 +1,4 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt')
 
 const sequelize = new Sequelize('expense-tracker','root','admin',{
     dialect : 'mysql',
@@ -22,6 +21,22 @@ const User = sequelize.define('User', {
   }
 });
 
+const Expense = sequelize.define('Expense', {
+  expense: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: true
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  expensetype: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
+
 (async () => {
   try {
     await sequelize.authenticate();
@@ -29,11 +44,13 @@ const User = sequelize.define('User', {
 
     //await User.sync({ force: true }); // force will delete previous data
     await User.sync(); // without force 
+    await Expense.sync(); // without force 
 
-    console.log('User model synced with the database.');
+    console.log('User and Expense models synced with the database.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
 })();
 
 module.exports = User;
+module.exports = Expense;

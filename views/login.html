@@ -36,9 +36,11 @@
       })
       .then(response => { generatedData = response.status + " "; return response.json();})
       .then(data => {
-        data.message 
+        //data.message 
         generatedData += data.message
         document.getElementById('message').innerText = generatedData
+        if(data.login)
+        window.location.href = 'addExpense.html';
       })
       .catch(error => {
         console.error('Error:', error);

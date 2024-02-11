@@ -52,17 +52,41 @@ app.post('/users/login', async (req, res) => {
     }
 
     bcrypt.compare(password,existingUser.password, 
-      (err,result)=>{
+      (err,result) =>{
         if(err) throw new Error('Something went wrong!')
         if(result==true)
-        return res.status(200).json({message: 'Logged in Succesfully'})
+        return res.status(200).json({message: 'Logged in Succesfully',login:true})
         else
-        return res.status(400).json({message: 'Wrong Password'})
+        return res.status(400).json({message: 'Wrong Password',login:false})
       })
   } catch (error) {
     console.error('Error logging in:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
+});
+
+app.post('/expense/add', async (req, res) => {
+  console.log(req.body); // Log the entire request body
+const { expense, description,expensetype } = req.body;
+
+try {
+  if (!expense) {
+    return res.status(400).json({ message: 'Expense is required' });
+  }
+  else if (!description) {
+    return res.status(400).json({ message: 'Description is required' });
+  }
+  else if (!expensetype) {
+    return res.status(400).json({ message: 'Expensetype is required' });
+  }
+
+  const newExpense = await Expense.create({ expense, description, expensetype });
+  return res.status(201).json({ message: 'Expense created successfully', expense: newExpense });
+
+} catch (error) {
+  console.error('Error logging in:', error);
+  return res.status(500).json({ message: 'Internal server error' });
+}
 });
 
 // Start the server
