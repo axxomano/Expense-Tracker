@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cors = require('cors'); 
 const User = require('./models/user');
+const Expense = require('./models/expense');
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,7 +12,7 @@ app.use(cors({origin: '*'}));
 
 
 app.post('/users/signup', async (req, res) => {
-    console.log(req.body); // Log the entire request body
+  console.log(req.body); // Log the entire request body
   const { name, email, password } = req.body;
 
   try {
