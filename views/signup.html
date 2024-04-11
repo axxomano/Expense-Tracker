@@ -46,6 +46,11 @@
         console.error('Error:', error);
       });
     }
+    window.addEventListener('DOMContentLoaded',()=> {
+      const token = localStorage.getItem('token')
+
+      fetch('http://localhost:3000/expense/getExpenses')
+    })
     </script>
     
 </body>

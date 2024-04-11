@@ -41,7 +41,7 @@ const Expense = sequelize.define('Expense', {
   try {
     await sequelize.authenticate();
     console.log('Connection to the database successful.');
-
+    
     //await Expense.sync({ force: true }); // force will delete previous data
     await Expense.sync(); // without force 
 

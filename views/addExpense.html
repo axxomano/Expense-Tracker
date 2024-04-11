@@ -29,12 +29,17 @@
   <p id="message"></p>
 </form>
 
+<p id="expenses"></p>
+
+
 <script>
     function submitForm() {
       const formData = {
         expense: document.getElementById('expense').value,
         description: document.getElementById('description').value,
         expensetype: document.getElementById('expensetype').value,
+        email: email,
+        UserId: userID,
       };
     let generatedData;
       fetch('http://localhost:3000/expense/add', {
@@ -54,6 +59,54 @@
         console.error('Error:', error);
       });
     }
+
+  document.addEventListener('DOMContentLoaded', function() {
+  
+  const token = localStorage.getItem('token');
+  const email = localStorage.getItem('email');
+  const userID = localStorage.getItem('userID');
+  
+  if (!token) {
+    console.error('Authorization token not found');
+    return;
+  }
+
+  fetch('http://localhost:3000/expenses/getAll', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      const expensesContainer = document.getElementById('expenses');
+      expensesContainer.innerHTML = ''; // Clear previous expenses
+      
+      data.expenses.forEach(expense => {
+        // Create HTML elements for each expense
+        const expenseElement = document.createElement('div');
+        expenseElement.innerHTML = `
+          <div>${expense.expense} - ${expense.description}
+          <button onclick="deleteExpense(${expense.id})">Delete</button></div>
+        `;
+        expensesContainer.appendChild(expenseElement);
+      });
+    });
+});
+
+function deleteExpense(id) {
+    fetch(`http://localhost:3000/expense/delete/${id}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+      // After deleting expense, refresh the list of expenses
+      getExpenses();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
     </script>
     
 </body>
